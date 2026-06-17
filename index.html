@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
+  <title>Hey KASL, Happy birthday darling :)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: rgb(21, 161, 237);
+      --primary-hover: rgb(127, 206, 248);
+      --text-main: #333;
+    }
+
+    html {
+      box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      color: var(--text-main);
+      background-color: #fdfdfd;
+    }
+
+    .song {
+      display: none;
+    }
+
+    .container {
+      height: 100vh;
+      width: 100vw;
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+      visibility: hidden;
+    }
+
+    /* Đảm bảo các khung hình nằm giữa màn hình */
+    .container > div {
+      left: 0;
+      right: 0;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 0 5vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Fluid Typography: Cỡ chữ co giãn mượt mà từ Mobile -> PC */
+    .one { font-size: clamp(2rem, 5vw, 4.5rem); margin-bottom: 10px; }
+    .two { font-size: clamp(1.5rem, 4vw, 3.2rem); margin: 0; }
+    .three { font-size: clamp(1.5rem, 4vw, 3rem); }
+
+    /* Box tin nhắn phản hồi tốt trên mobile */
+    .four .text-box {
+      border: 2px solid #aaa;
+      border-radius: 8px;
+      margin: 0 auto;
+      padding: 15px;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .text-box p {
+      margin: 0;
+      text-align: left;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      line-height: 1.6;
+    }
+
+    .text-box span {
+      visibility: hidden;
+    }
+
+    .text-box .fake-btn {
+      background-color: var(--primary-color);
+      border-radius: 5px;
+      bottom: -45px;
+      color: #fff;
+      padding: 0.5rem 1.2rem;
+      position: absolute;
+      right: 10px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* Các dòng ý tưởng */
+    .five p {
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      left: 0;
+      position: absolute;
+      right: 0;
+      padding: 0 20px;
+    }
+
+    .idea-3 strong {
+      border-radius: 3px;
+      display: inline-block;
+      padding: 3px 8px;
+    }
+
+    .five .idea-5 {
+      font-size: clamp(2rem, 5vw, 4rem);
+    }
+
+    .idea-5 span, .idea-6 span, .wish-hbd span {
+      display: inline-block;
+    }
+
+    .idea-6 span {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 600;
+    }
+
+    /* Khu vực ảnh avatar & mũ - Dùng bọc relative để không bao giờ lệch vị trí */
+    .six {
+      z-index: 1;
+    }
+
+    .profile-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .profile-wrapper img.profile-picture {
+      display: block;
+      height: auto;
+      width: clamp(150px, 40vw, 250px);
+      border-radius: 10px;
+    }
+
+   .profile-wrapper .hat {
+      position: absolute;
+      width: clamp(60px, 15vw, 100px);
+      bottom: -15%; 
+      z-index: 2; 
+      
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .wish {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .wish-hbd {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      margin: 0;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .wish h5 {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 300;
+      margin: 10px 0 0;
+      max-width: 800px;
+    }
+
+    /* Hiệu ứng bong bóng */
+    .baloons img {
+      display: inline-block;
+      position: absolute; 
+    }
+
+    .baloons img:nth-child(even) { left: 5%; }
+    .baloons img:nth-child(odd) { right: 5%; }
+    .baloons img:nth-child(3n + 0) { left: 30%; }
+
+    .seven, .eight {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      pointer-events: none; /* Tránh click nhầm vào layer này */
+    }
+
+    /* SVG Particles */
+    .eight svg {
+      left: 0;
+      position: absolute;
+      top: 0;
+      visibility: hidden;
+      width: 25px;
+      z-index: -1;
+    }
+
+    .eight svg:nth-child(1) { fill: #bd6ecf; left: 5vw; top: 7vh; }
+    .eight svg:nth-child(2) { fill: #7dd175; left: 35vw; top: 23vh; }
+    .eight svg:nth-child(3) { fill: #349d8b; left: 23vw; top: 33vh; }
+    .eight svg:nth-child(4) { fill: #347a9d; left: 57vw; top: 43vh; }
+    .eight svg:nth-child(5) { fill: #c66053; left: 7vw; top: 68vh; }
+    .eight svg:nth-child(6) { fill: #bfaa40; left: 77vw; top: 42vh; }
+    .eight svg:nth-child(7) { fill: #e3bae8; left: 83vw; top: 68vh; }
+    .eight svg:nth-child(8) { fill: #8762cb; left: 37vw; top: 86vh; }
+    .eight svg:nth-child(9) { fill: #9a90da; left: 87vw; top: 94vh; }
+
+    /* Màn hình cuối */
+    .nine p {
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      font-weight: 300;
+      margin: 10px 0;
+    }
+
+    #replay {
+      cursor: pointer;
+      z-index: 3;
+      color: var(--primary-color);
+      font-weight: 500;
+      text-decoration: underline;
+    }
+
+    .last-smile {
+      display: inline-block;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+  </style>
+</head>
+
+<body>
+
+    <audio class="song" loop>
+        <source src="hbd.mp3">
+        Your browser isn't invited for super fun audio time.
+    </audio>
+
+    <div class="container">
+        <div class="one">
+            <h1 class="one">
+                Hello my darling
+                <span id="name">Sofia Lê Kỳ Anh</span>
+            </h1>
+            <p class="two" id="greetingText">Em biết gì chưa?</p>
+        </div>
+
+        <div class="three">
+            <p>Hôm nay là một ngày đặc biệt!</p>
+        </div>
+
+        <div class="four">
+            <div class="text-box">
+                <p class="hbd-chatbox">
+                    Hôm nay khi đột nhiên check lại personal calendar, có một dòng ghi chú rất đặc biệt vào ngày hôm nay: "15/06". Đó là ngày sinh nhật của bé.
+                    Thật vui khi được chúc mừng sinh nhật bé trong ngày đặc biệt này! 😄 Không biết KASL đã có plan gì cho ngày hôm nay chưa?
+                </p>
+                <div class="fake-btn">Send</div>
+            </div>
+        </div>
+
+        <div class="five">
+            <p class="idea-1">Lúc đầu anh muốn gọi cho em</p>
+            <p class="idea-2">Nhưng sau đó anh đã dừng lại.</p>
+            <p class="idea-3">
+                Và anh nhận ra rằng, với một cựu học sinh IT của lqdnnter, thì sinh nhật bé phải làm một điều gì đó<br>
+                <strong>đặc biệt</strong>.
+            </p>
+            <p class="idea-4">Bởi vì,</p>
+            <p class="idea-5">
+                "You are the apple of my eye"
+                <span>:)</span>
+            </p>
+            <p class="idea-6">
+                <span>Happy </span>
+                <span>Birthday!</span>
+            </p>
+        </div>
+
+        <div class="six">
+            <div class="profile-wrapper">
+                <img src="img/tho.gif" alt="profile" class="profile-picture" id="imagePath"/>
+                <img src="img/cake.gif" alt="hat" class="hat" />
+            </div>
+            <div class="wish">
+                <h3 class="wish-hbd">Happy Birthday!</h3>
+                <h5 class="wishText">Chúc ebe cụa tui có một sinh nhật ngọt ngào như chính em đã mang lại cho anh! :)</h5>
+            </div>
+        </div>
+
+        <div class="seven">
+            <div class="baloons">
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" />
+            </div>
+        </div>
+
+        <div class="eight">
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+            <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
+        </div>
+
+        <div class="nine">
+            <p>Được rồi, bây giờ quay lại và cho tôi biết nếu bạn thích nó.</p>
+            <p id="replay">Hoặc nhấn vào đây, nếu bạn muốn xem lại.</p>
+            <p class="last-smile">:)</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+        window.addEventListener('load', () => {
+            Swal.fire({
+                title: 'Nghe một chút nhạc nha?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#15a1ed',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có chứ',
+                cancelButtonText: 'Bỏ qua',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.querySelector('.song').play().catch(()=>console.log("Audio play blocked by browser"));
+                }
+                animationTimeline();
+            });
+        });
+
+        const animationTimeline = () => {
+            const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
+            const hbd = document.getElementsByClassName("wish-hbd")[0];
+
+            // Tách từng chữ cái vào thẻ span để tạo hiệu ứng gõ phím
+            textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML.split("").join("</span><span>")}</span>`;
+            hbd.innerHTML = `<span>${hbd.innerHTML.split("").join("</span><span>")}</span>`;
+
+            const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
+            const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewX: "-15deg" };
+
+            const tl = gsap.timeline();
+
+            tl.to(".container", { duration: 0.6, visibility: "visible" })
+              .from(".one", { duration: 0.7, opacity: 0, y: 10 })
+              .from(".two", { duration: 0.4, opacity: 0, y: 10 })
+              .to(".one", { duration: 0.7, opacity: 0, y: 10 }, "+=3.5")
+              .to(".two", { duration: 0.7, opacity: 0, y: 10 }, "-=1")
+              .from(".three", { duration: 0.7, opacity: 0, y: 10 })
+              .to(".three", { duration: 0.7, opacity: 0, y: 10 }, "+=3")
+              .from(".four", { duration: 0.7, scale: 0.2, opacity: 0 })
+              .from(".fake-btn", { duration: 0.3, scale: 0.2, opacity: 0 })
+              
+              // HIỆU ỨNG GÕ CHỮ Ở ĐÂY
+              .to(".hbd-chatbox span", { visibility: "visible", duration: 0.05, stagger: 0.05 })
+              
+              .to(".fake-btn", { duration: 0.1, backgroundColor: "rgb(127, 206, 248)" }, "+=4")
+              .to(".four", { duration: 0.5, scale: 0.2, opacity: 0, y: -150 }, "+=1")
+              .from(".idea-1", { duration: 0.7, ...ideaTextTrans })
+              .to(".idea-1", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
+              .from(".idea-2", { duration: 0.7, ...ideaTextTrans })
+              .to(".idea-2", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
+              .from(".idea-3", { duration: 0.7, ...ideaTextTrans })
+              .to(".idea-3 strong", { duration: 0.5, scale: 1.2, x: 10, backgroundColor: "rgb(21, 161, 237)", color: "#fff" })
+              .to(".idea-3", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
+              .from(".idea-4", { duration: 0.7, ...ideaTextTrans })
+              .to(".idea-4", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
+              .from(".idea-5", { duration: 0.7, rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=1.5")
+              .to(".idea-5 span", { duration: 0.7, rotation: 90, x: 8 }, "+=1.4")
+              .to(".idea-5", { duration: 0.7, scale: 0.2, opacity: 0 }, "+=2")
+              
+              // Cập nhật lại hiệu ứng stagger cho các thẻ khác theo chuẩn GSAP 3
+              .from(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: 15, ease: "expo.out", stagger: 0.2 })
+              .to(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: -15, ease: "expo.out", stagger: 0.2 }, "+=1.5")
+              .fromTo(".baloons img", { opacity: 0.9, y: 1400 }, { duration: 2.5, opacity: 1, y: -1000, stagger: 0.2 })
+              .from(".profile-picture", { duration: 0.5, scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
+              .from(".hat", { duration: 0.5, x: -100, y: 350, rotation: -180, opacity: 0 })
+              .from(".wish-hbd span", { duration: 0.7, opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: "elastic.out(1, 0.5)", stagger: 0.1 })
+              .fromTo(".wish-hbd span", { scale: 1.4, rotationY: 150 }, { duration: 0.7, scale: 1, rotationY: 0, color: "#ff69b4", ease: "expo.out", stagger: 0.1 }, "party")
+              .from(".wish h5", { duration: 0.5, opacity: 0, y: 10, skewX: "-15deg" }, "party")
+              .to(".eight svg", { duration: 1.5, visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4, stagger: 0.3 })
+              .to(".six", { duration: 0.5, opacity: 0, y: 30, zIndex: "-1" })
+              .from(".nine p", { duration: 1, ...ideaTextTrans, stagger: 1.2 })
+              .to(".last-smile", { duration: 0.5, rotation: 90 }, "+=1");
+
+            const replyBtn = document.getElementById("replay");
+            replyBtn.addEventListener("click", () => {
+                tl.restart();
+            });
+        }
+    </script>
+</body>
+</html>
