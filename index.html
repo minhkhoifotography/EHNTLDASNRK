@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="UTF-8" />
@@ -7,234 +7,231 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
   <title>Hey TLDA, Call me now that your birthday is coming ^^ </title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Montserrat:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       --primary-color: rgb(21, 161, 237);
       --primary-hover: rgb(127, 206, 248);
-      --text-main: #333;
+      --text-main: #f0f0f0; 
+      --gold-royal: #d4af37;
+      --cue-color: #00ffcc;
     }
 
-    html {
-      box-sizing: border-box;
-    }
-
-    *, *:before, *:after {
-      box-sizing: inherit;
-    }
+    html { box-sizing: border-box; }
+    *, *:before, *:after { box-sizing: inherit; }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Montserrat', sans-serif;
       margin: 0;
       color: var(--text-main);
-      background-color: #fdfdfd;
-    }
-
-    .song {
-      display: none;
-    }
-
-    .container {
+      background: #050508;
+      overflow: hidden;
       height: 100vh;
       width: 100vw;
-      margin: 0 auto;
-      overflow: hidden;
-      position: relative;
-      text-align: center;
-      visibility: hidden;
     }
 
-    /* Đảm bảo các khung hình nằm giữa màn hình */
-    .container > div {
+    /* === GIAO DIỆN KỊCH BẢN === */
+    .ros-cue {
+      font-family: 'Space Mono', monospace;
+      color: var(--cue-color);
+      font-size: clamp(0.7rem, 2vw, 0.9rem);
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      border: 1px solid var(--cue-color);
+      padding: 5px 12px;
+      border-radius: 4px;
+      display: inline-block;
+      background: rgba(0, 255, 204, 0.1);
+      box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      opacity: 0; 
+      transform: translateY(-10px);
+    }
+    
+    .ros-cue.warning {
+      color: #ff3366;
+      border-color: #ff3366;
+      background: rgba(255, 51, 102, 0.1);
+      box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
+    }
+
+    /* FIX LỖI ĐÈ CHỮ: Đẩy các CUE 4 và 5 lên cao tuyệt đối, không phụ thuộc vào text */
+    .five .ros-cue, .six .ros-cue {
+      position: absolute;
+      top: -22vh; /* Đẩy hẳn lên phía trên tâm sân khấu */
       left: 0;
       right: 0;
+      margin: 0 auto;
+      width: max-content;
+      z-index: 10;
+    }
+
+    /* === SÂN KHẤU & ĐÈN SPOTLIGHT TRỰC DIỆN CỰC MẠNH === */
+    .stage-effects {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0; 
+    }
+
+    /* Tạo vệt sáng tụ lại ở tâm sân khấu (Light Pool) */
+    .stage-effects::after {
+      content: "";
       position: absolute;
       top: 50%;
-      transform: translateY(-50%);
-      padding: 0 5vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-
-    /* Fluid Typography: Cỡ chữ co giãn mượt mà từ Mobile -> PC */
-    .one { font-size: clamp(2rem, 5vw, 4.5rem); margin-bottom: 10px; }
-    .two { font-size: clamp(1.5rem, 4vw, 3.2rem); margin: 0; }
-    .three { font-size: clamp(1.5rem, 4vw, 3rem); }
-
-    /* Box tin nhắn phản hồi tốt trên mobile */
-    .four .text-box {
-      border: 2px solid #aaa;
-      border-radius: 8px;
-      margin: 0 auto;
-      padding: 15px;
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      background: #fff;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-
-    .text-box p {
-      margin: 0;
-      text-align: left;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      line-height: 1.6;
-    }
-
-    .text-box span {
-      visibility: hidden;
-    }
-
-    .text-box .fake-btn {
-      background-color: var(--primary-color);
-      border-radius: 5px;
-      bottom: -45px;
-      color: #fff;
-      padding: 0.5rem 1.2rem;
-      position: absolute;
-      right: 10px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    /* Các dòng ý tưởng */
-    .five p {
-      font-size: clamp(1.2rem, 3.5vw, 2rem);
-      left: 0;
-      position: absolute;
-      right: 0;
-      padding: 0 20px;
-    }
-
-    .idea-3 strong {
-      border-radius: 3px;
-      display: inline-block;
-      padding: 3px 8px;
-    }
-
-    .five .idea-5 {
-      font-size: clamp(2rem, 5vw, 4rem);
-    }
-
-    .idea-5 span, .idea-6 span, .wish-hbd span {
-      display: inline-block;
-    }
-
-    .idea-6 span {
-      font-size: clamp(3rem, 10vw, 6rem);
-      font-weight: 600;
-    }
-
-    /* Khu vực ảnh avatar & mũ - Dùng bọc relative để không bao giờ lệch vị trí */
-    .six {
-      z-index: 1;
-    }
-
-    .profile-wrapper {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 20px;
-    }
-
-    .profile-wrapper img.profile-picture {
-      display: block;
-      height: auto;
-      width: clamp(150px, 40vw, 250px);
-      border-radius: 10px;
-    }
-
-   .profile-wrapper .hat {
-      position: absolute;
-      width: clamp(60px, 15vw, 100px);
-      bottom: -15%; 
-      z-index: 2; 
-      
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, -50%);
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(212, 175, 55, 0.05) 30%, transparent 60%);
+      pointer-events: none;
+      mix-blend-mode: screen;
     }
 
-    .wish {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .wish-hbd {
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      margin: 0;
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    .wish h5 {
-      font-size: clamp(1.2rem, 3vw, 2rem);
-      font-weight: 300;
-      margin: 10px 0 0;
-      max-width: 800px;
-    }
-
-    /* Hiệu ứng bong bóng */
-    .baloons img {
-      display: inline-block;
-      position: absolute; 
-    }
-
-    .baloons img:nth-child(even) { left: 5%; }
-    .baloons img:nth-child(odd) { right: 5%; }
-    .baloons img:nth-child(3n + 0) { left: 30%; }
-
-    .seven, .eight {
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      width: 100vw;
-      pointer-events: none; /* Tránh click nhầm vào layer này */
-    }
-
-    /* SVG Particles */
-    .eight svg {
-      left: 0;
+    .spotlight {
       position: absolute;
-      top: 0;
-      visibility: hidden;
-      width: 25px;
-      z-index: -1;
+      top: -10vh;
+      width: 40vw;
+      height: 120vh;
+      /* Nguồn sáng đậm ở trên và nhạt/tỏa dần về dưới */
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.08) 60%, transparent 100%);
+      /* Cắt chùm tia để nguồn nhỏ, đáy loe to chiếu vào nội dung */
+      clip-path: polygon(45% 0%, 55% 0%, 85% 100%, 15% 100%);
+      pointer-events: none;
+      filter: blur(8px);
+      mix-blend-mode: screen; 
     }
 
-    .eight svg:nth-child(1) { fill: #bd6ecf; left: 5vw; top: 7vh; }
-    .eight svg:nth-child(2) { fill: #7dd175; left: 35vw; top: 23vh; }
-    .eight svg:nth-child(3) { fill: #349d8b; left: 23vw; top: 33vh; }
-    .eight svg:nth-child(4) { fill: #347a9d; left: 57vw; top: 43vh; }
-    .eight svg:nth-child(5) { fill: #c66053; left: 7vw; top: 68vh; }
-    .eight svg:nth-child(6) { fill: #bfaa40; left: 77vw; top: 42vh; }
-    .eight svg:nth-child(7) { fill: #e3bae8; left: 83vw; top: 68vh; }
-    .eight svg:nth-child(8) { fill: #8762cb; left: 37vw; top: 86vh; }
-    .eight svg:nth-child(9) { fill: #9a90da; left: 87vw; top: 94vh; }
-
-    /* Màn hình cuối */
-    .nine p {
-      font-size: clamp(1.2rem, 3.5vw, 2rem);
-      font-weight: 300;
-      margin: 10px 0;
+    /* Ép 2 đèn chụm thẳng vào đúng vị trí nội dung (top center origin) */
+    .spotlight-left {
+      left: -2vw;
+      transform-origin: top center;
+      transform: rotate(32deg);
+      animation: spot-pulse-left 4s infinite alternate ease-in-out;
     }
 
-    #replay {
-      cursor: pointer;
-      z-index: 3;
-      color: var(--primary-color);
-      font-weight: 500;
-      text-decoration: underline;
+    .spotlight-right {
+      right: -2vw;
+      transform-origin: top center;
+      transform: rotate(-32deg);
+      animation: spot-pulse-right 5s infinite alternate ease-in-out;
     }
 
-    .last-smile {
-      display: inline-block;
-      font-size: clamp(2rem, 5vw, 3rem);
+    @keyframes spot-pulse-left {
+      0% { transform: rotate(29deg); opacity: 0.6; filter: blur(8px); }
+      100% { transform: rotate(35deg); opacity: 1; filter: blur(15px); }
     }
+
+    @keyframes spot-pulse-right {
+      0% { transform: rotate(-29deg); opacity: 0.6; filter: blur(8px); }
+      100% { transform: rotate(-35deg); opacity: 1; filter: blur(15px); }
+    }
+
+    .particle {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #fff, 0 0 20px var(--gold-royal);
+      pointer-events: none;
+    }
+
+    /* === HIỆU ỨNG RÈM SÂN KHẤU === */
+    .theater-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 9999; display: flex; justify-content: center; align-items: center; background-color: #000; overflow: hidden;
+    }
+    .curtain {
+      position: absolute; top: 0; width: 50vw; height: 100vh;
+      background: linear-gradient(to right, #1a0000 0%, #4a0000 50%, #1a0000 100%); box-shadow: inset 0 0 40px rgba(0,0,0,0.9); z-index: 2;
+    }
+    .curtain::after {
+      content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-linear-gradient(to right, transparent, transparent 10%, rgba(0,0,0,0.4) 15%, transparent 20%);
+    }
+    .curtain-left { left: 0; transform-origin: left; box-shadow: 10px 0 30px rgba(0,0,0,0.8); }
+    .curtain-right { right: 0; transform-origin: right; box-shadow: -10px 0 30px rgba(0,0,0,0.8); }
+    .intro-content { position: relative; z-index: 3; text-align: center; color: #fff; }
+
+    .cinematic-title {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: 10px;
+      text-transform: uppercase; margin-bottom: 50px; color: var(--gold-royal);
+      text-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 10px rgba(212, 175, 55, 0.4); opacity: 0; 
+    }
+    .start-btn {
+      background: transparent; color: #fff; border: 1px solid var(--gold-royal); padding: 15px 45px;
+      font-size: 1.1rem; font-family: 'Montserrat', sans-serif; letter-spacing: 4px; text-transform: uppercase; cursor: pointer;
+      transition: all 0.4s ease; opacity: 0; border-radius: 4px;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(212, 175, 55, 0.2); animation: pulse-glow 2s infinite alternate;
+    }
+    .start-btn:hover { background: rgba(212, 175, 55, 0.15); border-color: #fff; text-shadow: 0 0 10px #fff; }
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(212, 175, 55, 0.2); }
+      100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.4); border-color: #fff; }
+    }
+    .cinematic-bars {
+      position: fixed; left: 0; width: 100vw; height: 8vh; background: #000;
+      z-index: 9998; transition: transform 2.5s ease-in-out; pointer-events: none;
+    }
+    .bar-top { top: 0; transform: translateY(-100%); }
+    .bar-bottom { bottom: 0; transform: translateY(100%); }
+
+    /* ============================================== */
+    .container {
+      height: 100vh; width: 100vw; margin: 0 auto; overflow: hidden;
+      position: relative; text-align: center; visibility: hidden; z-index: 1; transform-origin: center center; 
+    }
+    .container > div {
+      left: 0; right: 0; position: absolute; top: 50%; transform: translateY(-50%);
+      padding: 0 5vw; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;
+    }
+
+    .one { font-size: clamp(2rem, 5vw, 4.5rem); margin-bottom: 10px; font-family: 'Cormorant Garamond', serif; text-shadow: 0 10px 20px rgba(0,0,0,0.8); }
+    .two { font-size: clamp(1.2rem, 3.5vw, 2.5rem); margin: 0; font-weight: 300; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+    .three { font-size: clamp(1.5rem, 4vw, 3rem); font-weight: 300; font-family: 'Cormorant Garamond', serif; font-style: italic;}
+
+    .four .text-box {
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; margin: 0 auto; padding: 30px; position: relative; width: 100%; max-width: 700px;
+      background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(15px); box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 255, 204, 0.05); border-left: 3px solid var(--cue-color);
+    }
+    .text-box p { margin: 0; text-align: left; font-size: clamp(1rem, 2.5vw, 1.1rem); line-height: 2; color: #e0e0e0; font-weight: 300; }
+    .text-box span { visibility: hidden; }
+    .text-box .fake-btn {
+      background: transparent; border: 1px solid var(--cue-color); color: var(--cue-color); bottom: -20px; padding: 0.5rem 2rem; position: absolute; right: 30px; font-weight: 500; font-family: 'Space Mono', monospace; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; transition: all 0.3s;
+    }
+    .text-box .fake-btn:hover { background: var(--cue-color); color: #000; }
+
+    .five p { font-size: clamp(1.2rem, 3.5vw, 2rem); left: 0; position: absolute; right: 0; padding: 0 20px; font-weight: 300; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+    .idea-3 strong { border-radius: 3px; display: inline-block; padding: 3px 8px; }
+    .five .idea-5 { font-size: clamp(2rem, 5vw, 4rem); font-family: 'Cormorant Garamond', serif; }
+    .idea-5 span, .idea-6 span, .wish-hbd span { display: inline-block; }
+    .idea-6 span { font-size: clamp(3rem, 10vw, 6rem); font-weight: 700; font-family: 'Cormorant Garamond', serif; color: var(--gold-royal); text-shadow: 0 0 25px rgba(212, 175, 55, 0.5); }
+
+    .six { z-index: 1; }
+    .profile-wrapper { position: relative; display: inline-block; margin-bottom: 30px; }
+    .profile-wrapper img.profile-picture {
+      display: block; height: auto; width: clamp(150px, 40vw, 250px); border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 20px rgba(212, 175, 55, 0.3); 
+    }
+    .profile-wrapper .hat { position: absolute; width: clamp(60px, 15vw, 100px); bottom: -15%; z-index: 2; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)); }
+    .wish { display: flex; flex-direction: column; align-items: center; }
+    .wish-hbd { font-size: clamp(2.2rem, 6vw, 4rem); margin: 0; text-transform: uppercase; font-weight: 700; font-family: 'Cormorant Garamond', serif; text-shadow: 0 0 20px rgba(255,105,180,0.6); }
+    .wish h5 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 300; margin: 20px 0 0; max-width: 800px; color: #e0e0e0; line-height: 1.8; text-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+
+    .baloons img { display: inline-block; position: absolute; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4)); }
+    .baloons img:nth-child(even) { left: 5%; } .baloons img:nth-child(odd) { right: 5%; } .baloons img:nth-child(3n + 0) { left: 30%; }
+
+    .seven, .eight { height: 100vh; position: fixed; top: 0; width: 100vw; pointer-events: none; z-index: 0; }
+    .eight svg { left: 0; position: absolute; top: 0; visibility: hidden; width: 25px; z-index: -1; filter: blur(1px); }
+    .eight svg:nth-child(1) { fill: #e09deb; left: 5vw; top: 7vh; } .eight svg:nth-child(2) { fill: #9dec94; left: 35vw; top: 23vh; } .eight svg:nth-child(3) { fill: #4ceac2; left: 23vw; top: 33vh; } .eight svg:nth-child(4) { fill: #48b7ec; left: 57vw; top: 43vh; } .eight svg:nth-child(5) { fill: #ec7c6b; left: 7vw; top: 68vh; } .eight svg:nth-child(6) { fill: #ecd65d; left: 77vw; top: 42vh; } .eight svg:nth-child(7) { fill: #f3d7f7; left: 83vw; top: 68vh; } .eight svg:nth-child(8) { fill: #ab86f2; left: 37vw; top: 86vh; } .eight svg:nth-child(9) { fill: #b8aff2; left: 87vw; top: 94vh; }
+
+    .nine p { font-size: clamp(1.2rem, 3.5vw, 2rem); font-weight: 300; margin: 10px 0; }
+    #replay { cursor: pointer; z-index: 3; color: var(--cue-color); font-weight: 500; font-family: 'Space Mono', monospace; text-decoration: none; transition: all 0.3s; border: 1px solid transparent; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; }
+    #replay:hover { color: #000; background: var(--cue-color); box-shadow: 0 0 15px rgba(0, 255, 204, 0.6); }
+    .last-smile { display: inline-block; font-size: clamp(2rem, 5vw, 3rem); color: var(--gold-royal); font-family: 'Cormorant Garamond', serif;}
   </style>
 </head>
 
@@ -242,35 +239,60 @@
 
     <audio class="song" loop>
         <source src="Em.mp3">
-        Your browser isn't invited for super fun audio time.
+    </audio>
+    <audio id="applauseSound">
+        <source src="https://assets.mixkit.co/active_storage/sfx/354/354-preview.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="container">
+    <div class="cinematic-bars bar-top"></div>
+    <div class="cinematic-bars bar-bottom"></div>
+
+    <div class="theater-overlay">
+        <div class="curtain curtain-left"></div>
+        <div class="curtain curtain-right"></div>
+        <div class="intro-content">
+            <h2 class="cinematic-title">A Special Presentation</h2>
+            <button class="start-btn">Kéo rèm</button>
+        </div>
+    </div>
+
+    <!-- Hệ thống Spotlight và nền sáng floor light -->
+    <div class="stage-effects" id="stageEffects">
+        <div class="spotlight spotlight-left"></div>
+        <div class="spotlight spotlight-right"></div>
+        <div id="particles"></div>
+    </div>
+
+    <div class="container" id="mainContainer">
         <div class="one">
+            <div class="ros-cue">[CUE 01: OPENING MONOLOGUE]</div>
             <h1 class="one">
-                Hello cái đứa bị tao hành nhất cuộc đời
-                <span id="name">Trịnh Lê Diệu Anh</span>
+                Hello cái đứa bị tao hành nhất cuộc đời<br>
+                <span id="name" style="font-weight: 700; color: #d4af37;">Trịnh Lê Diệu Anh</span>
             </h1>
             <p class="two" id="greetingText">Tao nghĩ chắc đến giờ mầy vẫn giận tao lắm vì tao không hề nhớ đến sinh nhật mầy mà lại đi quan tâm đến một người con gái khác đúng không?</p>
         </div>
 
         <div class="three">
+            <div class="ros-cue warning">[CUE 02: PLOT TWIST]</div>
             <p>Thật ra thì không phải như vậy ...</p>
         </div>
 
         <div class="four">
             <div class="text-box">
+                <div class="ros-cue" style="position: absolute; top: -15px; left: 20px; background: #0a0a0f;">[CUE 03: THE CONFESSION SCRIPT]</div>
                 <p class="hbd-chatbox">
-                    Xin chào Diệu Anh, chắc đây sẽ là món quà sinh nhật đầu tiên của tao dành cho mầy. 
+                  Xin chào Diệu Anh, chắc đây sẽ là món quà sinh nhật đầu tiên của tao dành cho mầy. 
                   Thật ra thì đến tận ngày hôm nay thì tao vẫn đang chưa thể nào ngờ được mầy lại chịu đi làm bạn với một con người như tao.
                   Đôi khi tao nghĩ lại thì chắc tao đã thật sự bốc lột mầy rất nhiều trong nhiều việc và điều đó đã đủ để làm cho mầy đủ tất cả những lý do để mầy không chơi với tao nữa.
                   Nhưng rồi... mầy vẫn quyết định chọn tao để tiếp tục đồng hành dù rằng 2 đứa cũng khá chênh lệch về nhiều mặt ...
                 </p>
-                <div class="fake-btn">Send</div>
+                <div class="fake-btn">EXECUTE [SEND]</div>
             </div>
         </div>
 
         <div class="five">
+            <div class="ros-cue">[CUE 04: BUILD UP]</div>
             <p class="idea-1">Thật ra tao đã định sẽ không làm</p>
             <p class="idea-2">Nhưng sau đó tao đã nghĩ lại.</p>
             <p class="idea-3">
@@ -280,7 +302,7 @@
             <p class="idea-4">Bởi vì,</p>
             <p class="idea-5">
                 Mầy là người bạn rất đặc biệt của tao
-                <span>:)</span>
+                <span style="color: #d4af37;">:)</span>
             </p>
             <p class="idea-6">
                 <span>Happy </span>
@@ -289,51 +311,34 @@
         </div>
 
         <div class="six">
+            <div class="ros-cue">[CUE 05: MAIN VISUAL & WISHES]</div>
             <div class="profile-wrapper">
                 <img src="img/DA.jpg" alt="profile" class="profile-picture" id="imagePath"/>
                 <img src="img/cake.gif" alt="hat" class="hat" />
             </div>
             <div class="wish">
-                <h3 class="wish-hbd">Happy Birthday Trịnh Lê Diệu Anh!</h3>
+                <h3 class="wish-hbd">Happy Birthday Diệu Anh!</h3>
                 <h5 class="wishText">Chúc cho ebe cụa ba Việt mẹ Trà sẽ có một cuộc đời ý nghĩa, ráng có sức khỏe để chăm sóc tao nữa, giàu có để lo cho gia đình nhỏ của tao nhé. Welcome to your 18 chapter :)</h5>
             </div>
         </div>
 
         <div class="seven">
             <div class="baloons">
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon1.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
-                <img src="img/ballon2.svg" alt="" />
-                <img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" /><img src="img/ballon1.svg" alt="" /><img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" /><img src="img/ballon2.svg" alt="" /><img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" /><img src="img/ballon3.svg" alt="" /><img src="img/ballon1.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" /><img src="img/ballon3.svg" alt="" /><img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" /><img src="img/ballon3.svg" alt="" /><img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon3.svg" alt="" /><img src="img/ballon1.svg" alt="" /><img src="img/ballon2.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" /><img src="img/ballon3.svg" alt="" /><img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon1.svg" alt="" /><img src="img/ballon2.svg" alt="" /><img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" /><img src="img/ballon1.svg" alt="" /><img src="img/ballon3.svg" alt="" />
+                <img src="img/ballon2.svg" alt="" /><img src="img/ballon3.svg" alt="" />
             </div>
         </div>
 
         <div class="eight">
+            <!-- (Giữ nguyên mảng pháo hoa SVG) -->
             <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
             <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
             <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="20" cy="20" r="20" /></svg>
@@ -346,29 +351,76 @@
         </div>
 
         <div class="nine">
-            <p>Được rồi, bây giờ quay lại và cho tôi biết nếu bạn thích nó.</p>
-            <p id="replay">Hoặc nhấn vào đây, nếu bạn muốn xem lại.</p>
+            <div class="ros-cue" style="position: absolute; top: -15vh;">[END OF SCRIPT]</div>
+            <p>Được rồi, bây giờ quay lại và cho tôi biết cảm nhận nhé.</p>
+            <p id="replay">> RESTART_SEQUENCE.exe</p>
             <p class="last-smile">:)</p>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        const createParticles = () => {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 40; i++) {
+                let p = document.createElement('div');
+                p.className = 'particle';
+                container.appendChild(p);
+                
+                let size = Math.random() * 4 + 1;
+                gsap.set(p, { width: size, height: size, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, opacity: Math.random() * 0.5 + 0.1 });
+                gsap.to(p, { duration: Math.random() * 10 + 10, y: `-=${Math.random() * 200 + 100}`, x: `+=${Math.random() * 100 - 50}`, rotation: Math.random() * 360, repeat: -1, yoyo: true, ease: "sine.inOut" });
+            }
+        };
+
+        const fireGrandOpening = () => {
+            var duration = 4 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
+
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.2), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.8, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        };
+
         window.addEventListener('load', () => {
-            Swal.fire({
-                title: 'Nghe một chút nhạc nha?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#15a1ed',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Có chứ',
-                cancelButtonText: 'Bỏ qua',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.querySelector('.song').play().catch(()=>console.log("Audio play blocked by browser"));
-                }
-                animationTimeline();
+            createParticles();
+
+            gsap.to(".cinematic-title", { duration: 2, opacity: 1, y: -20, ease: "power2.out" });
+            gsap.to(".start-btn", { duration: 1.5, opacity: 1, delay: 1.5, ease: "power2.out" });
+
+            document.querySelector('.start-btn').addEventListener('click', () => {
+                document.querySelector('.song').play().catch(()=>console.log("Audio play blocked"));
+                
+                document.querySelector('.bar-top').style.transform = 'translateY(0)';
+                document.querySelector('.bar-bottom').style.transform = 'translateY(0)';
+
+                const introTl = gsap.timeline({
+                    onComplete: () => {
+                        document.querySelector('.theater-overlay').style.display = 'none';
+                        animationTimeline();
+                    }
+                });
+
+                introTl.to(".intro-content", { duration: 0.8, opacity: 0, scale: 0.9 })
+                       .to(".curtain-left", { duration: 2.5, x: "-100%", ease: "power3.inOut" }, "-=0.2")
+                       .to(".curtain-right", { duration: 2.5, x: "100%", ease: "power3.inOut" }, "-=2.5")
+                       .to(".theater-overlay", { duration: 0.5, backgroundColor: "transparent" }, "-=1")
+                       .add(() => {
+                           document.getElementById('applauseSound').play();
+                           fireGrandOpening();
+                       }, "-=1.5")
+                       .to("#stageEffects", { duration: 2, opacity: 1 }, "-=1.5");
             });
         });
 
@@ -376,7 +428,6 @@
             const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
             const hbd = document.getElementsByClassName("wish-hbd")[0];
 
-            // Tách từng chữ cái vào thẻ span để tạo hiệu ứng gõ phím
             textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML.split("").join("</span><span>")}</span>`;
             hbd.innerHTML = `<span>${hbd.innerHTML.split("").join("</span><span>")}</span>`;
 
@@ -385,50 +436,75 @@
 
             const tl = gsap.timeline();
 
+            gsap.to("#mainContainer", { duration: 50, scale: 1.15, ease: "none" });
+
             tl.to(".container", { duration: 0.6, visibility: "visible" })
-              .from(".one", { duration: 0.7, opacity: 0, y: 10 })
-              .from(".two", { duration: 0.4, opacity: 0, y: 10 })
-              .to(".one", { duration: 0.7, opacity: 0, y: 10 }, "+=3.5")
-              .to(".two", { duration: 0.7, opacity: 0, y: 10 }, "-=1")
-              .from(".three", { duration: 0.7, opacity: 0, y: 10 })
-              .to(".three", { duration: 0.7, opacity: 0, y: 10 }, "+=3")
-              .from(".four", { duration: 0.7, scale: 0.2, opacity: 0 })
-              .from(".fake-btn", { duration: 0.3, scale: 0.2, opacity: 0 })
+              // Scene 1
+              .to(".one .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
+              .from(".one h1", { duration: 0.7, opacity: 0, y: 20, ease: "power2.out" })
+              .from(".one p", { duration: 0.5, opacity: 0, y: 20, ease: "power2.out" })
+              .to(".one", { duration: 0.7, opacity: 0, y: 10, ease: "power2.in" }, "+=4")
               
-              // HIỆU ỨNG GÕ CHỮ Ở ĐÂY
-              .to(".hbd-chatbox span", { visibility: "visible", duration: 0.05, stagger: 0.05 })
+              // Scene 2
+              .to(".three .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
+              .from(".three p", { duration: 0.8, opacity: 0, y: 10, scale: 0.95, ease: "power2.out" })
+              .to(".three", { duration: 0.7, opacity: 0, y: 10, ease: "power2.in" }, "+=3")
               
-              .to(".fake-btn", { duration: 0.1, backgroundColor: "rgb(127, 206, 248)" }, "+=4")
-              .to(".four", { duration: 0.5, scale: 0.2, opacity: 0, y: -150 }, "+=1")
-              .from(".idea-1", { duration: 0.7, ...ideaTextTrans })
+              // Scene 3
+              .to(".four .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
+              .from(".four", { duration: 0.8, scale: 0.8, opacity: 0, rotationX: 15, transformPerspective: 1000 })
+              .from(".fake-btn", { duration: 0.4, scale: 0.2, opacity: 0 })
+              .to(".hbd-chatbox span", { visibility: "visible", duration: 0.05, stagger: 0.04 })
+              .to(".fake-btn", { duration: 0.1, backgroundColor: "var(--cue-color)", color: "#000" }, "+=4.5")
+              .to(".four", { duration: 0.6, scale: 0.8, opacity: 0, y: -150, ease: "power2.in" }, "+=0.5")
+              
+              // Scene 4
+              .to(".five .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
+              .from(".idea-1", { duration: 0.8, ...ideaTextTrans })
               .to(".idea-1", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
-              .from(".idea-2", { duration: 0.7, ...ideaTextTrans })
+              .from(".idea-2", { duration: 0.8, ...ideaTextTrans })
               .to(".idea-2", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
-              .from(".idea-3", { duration: 0.7, ...ideaTextTrans })
-              .to(".idea-3 strong", { duration: 0.5, scale: 1.2, x: 10, backgroundColor: "rgb(21, 161, 237)", color: "#fff" })
+              .from(".idea-3", { duration: 0.8, ...ideaTextTrans })
+              .to(".idea-3 strong", { duration: 0.5, scale: 1.2, x: 10, backgroundColor: "#d4af37", color: "#000", boxShadow: "0 0 15px #d4af37" })
               .to(".idea-3", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
-              .from(".idea-4", { duration: 0.7, ...ideaTextTrans })
+              .from(".idea-4", { duration: 0.8, ...ideaTextTrans })
               .to(".idea-4", { duration: 0.7, ...ideaTextTransLeave }, "+=2.5")
-              .from(".idea-5", { duration: 0.7, rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=1.5")
+              .from(".idea-5", { duration: 0.8, rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=1.5")
               .to(".idea-5 span", { duration: 0.7, rotation: 90, x: 8 }, "+=1.4")
-              .to(".idea-5", { duration: 0.7, scale: 0.2, opacity: 0 }, "+=2")
+              .to(".idea-5", { duration: 0.7, scale: 0.2, opacity: 0 }, "+=2.5")
+              .from(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: 15, ease: "back.out(1.7)", stagger: 0.2 })
+              .to(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: -15, ease: "back.in(1.7)", stagger: 0.2 }, "+=2")
               
-              // Cập nhật lại hiệu ứng stagger cho các thẻ khác theo chuẩn GSAP 3
-              .from(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: 15, ease: "expo.out", stagger: 0.2 })
-              .to(".idea-6 span", { duration: 0.8, scale: 3, opacity: 0, rotation: -15, ease: "expo.out", stagger: 0.2 }, "+=1.5")
-              .fromTo(".baloons img", { opacity: 0.9, y: 1400 }, { duration: 2.5, opacity: 1, y: -1000, stagger: 0.2 })
-              .from(".profile-picture", { duration: 0.5, scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
-              .from(".hat", { duration: 0.5, x: -100, y: 350, rotation: -180, opacity: 0 })
+              // FIX LỖI TỒN ĐỌNG CUE 4: Làm mờ CUE 4 trước khi chuyển cảnh
+              .to(".five .ros-cue", { duration: 0.5, opacity: 0, y: -20 }, "-=0.5")
+
+              // Mở rộng màn hình (tắt letterbox)
+              .add(() => {
+                  document.querySelector('.bar-top').style.transform = 'translateY(-100%)';
+                  document.querySelector('.bar-bottom').style.transform = 'translateY(100%)';
+              }, "-=0.2")
+
+              // Scene 5 (Wishes)
+              .to(".six .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
+              .fromTo(".baloons img", { opacity: 0.9, y: 1400 }, { duration: 3, opacity: 1, y: -1000, stagger: 0.2, ease: "power1.out" })
+              .from(".profile-picture", { duration: 0.8, scale: 2.5, opacity: 0, x: 25, y: -25, rotationZ: -20, ease: "back.out(1.2)" }, "-=2.5")
+              .from(".hat", { duration: 0.6, x: -100, y: 350, rotation: -180, opacity: 0, ease: "power2.out" })
               .from(".wish-hbd span", { duration: 0.7, opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: "elastic.out(1, 0.5)", stagger: 0.1 })
-              .fromTo(".wish-hbd span", { scale: 1.4, rotationY: 150 }, { duration: 0.7, scale: 1, rotationY: 0, color: "#ff69b4", ease: "expo.out", stagger: 0.1 }, "party")
-              .from(".wish h5", { duration: 0.5, opacity: 0, y: 10, skewX: "-15deg" }, "party")
-              .to(".eight svg", { duration: 1.5, visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4, stagger: 0.3 })
-              .to(".six", { duration: 0.5, opacity: 0, y: 30, zIndex: "-1" })
+              .fromTo(".wish-hbd span", { scale: 1.4, rotationY: 150 }, { duration: 0.7, scale: 1, rotationY: 0, color: "#d4af37", ease: "expo.out", stagger: 0.1 }, "party")
+              .from(".wish h5", { duration: 0.6, opacity: 0, y: 20, skewX: "-15deg", ease: "power2.out" }, "party")
+              .to(".eight svg", { duration: 1.5, visibility: "visible", opacity: 0, scale: 90, repeat: 3, repeatDelay: 1.4, stagger: 0.3 })
+              .to(".six", { duration: 0.6, opacity: 0, y: 30, zIndex: "-1", ease: "power2.in" })
+              
+              // End
+              .to(".nine .ros-cue", {duration: 0.4, opacity: 1, y: 0, ease: "back.out"})
               .from(".nine p", { duration: 1, ...ideaTextTrans, stagger: 1.2 })
               .to(".last-smile", { duration: 0.5, rotation: 90 }, "+=1");
 
             const replyBtn = document.getElementById("replay");
             replyBtn.addEventListener("click", () => {
+                gsap.set("#mainContainer", {scale: 1}); 
+                document.querySelector('.bar-top').style.transform = 'translateY(0)';
+                document.querySelector('.bar-bottom').style.transform = 'translateY(0)';
                 tl.restart();
             });
         }
